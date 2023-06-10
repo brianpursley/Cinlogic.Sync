@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Cinlogic.Sync</id>
-    <version>1.0.0</version>
+    <version>1.0.0</version> <!-- This is a placeholder and will be overridden -->
     <authors>Brian Pursley</authors>
     <owners>Cinlogic LLC</owners>
     <licenseUrl>https://github.com/brianpursley/Cinlogic.Sync/blob/main/LICENSE</licenseUrl>
