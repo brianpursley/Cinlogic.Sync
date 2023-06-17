@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.after }}  # This checks out the commit that triggered the workflow run
+          ref: ${{ github.ref }}  # This checks out the commit that triggered the workflow run
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -33,7 +33,7 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Pack
-        run: dotnet pack --no-build --configuration Release /p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output out
+        run: dotnet pack --no-build --configuration Release /p:PackageVersion=${{ steps.get_version.outputs.VERSION }} /p:CopyrightYear=$(date +%Y) --output out
 
       - name: Push
         run: dotnet nuget push "out/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

@@ -5,6 +5,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11</LangVersion>
+        <PackageId>Cinlogic.Sync</PackageId>
+        <Authors>Brian Pursley</Authors>
+        <Company>Cinlogic LLC</Company>
+        <PackageProjectUrl>https://github.com/brianpursley/Cinlogic.Sync</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright © $(CopyrightYear) Cinlogic LLC</Copyright>
+        <Version>0.0.0</Version>
+        <Description>Cinlogic.Sync provides an easy way to ensure an action or function is executed only once in a multi-threaded environment. It is inspired by Go's sync.Once type.</Description>
+        <RepositoryUrl>https://github.com/brianpursley/Cinlogic.Sync</RepositoryUrl>
+        <PackageTags>Sync Once Threading</PackageTags>
     </PropertyGroup>
 
 </Project>
