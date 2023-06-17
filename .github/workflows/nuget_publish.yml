@@ -1,9 +1,8 @@
 name: NuGet Publish
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+.*'
+  release:
+    types: [published, created, edited]
 
 jobs:
   publish:
@@ -30,10 +29,10 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
 
       - name: Pack
-        run: dotnet pack --no-build --configuration Release /p:PackageVersion=${{ steps.get_version.outputs.VERSION }} /p:CopyrightYear=$(date +%Y) --output out
+        run: dotnet pack Cinlogic.Sync/Cinlogic.Sync.csproj --no-build --configuration Release /p:PackageVersion=${{ steps.get_version.outputs.VERSION }} /p:CopyrightYear=$(date +%Y) --output out
 
       - name: Push
         run: dotnet nuget push "out/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
