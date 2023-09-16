@@ -4,6 +4,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinlogic.Sync", "Cinlogic.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinlogic.Sync.Tests", "Cinlogic.Sync.Tests\Cinlogic.Sync.Tests.csproj", "{255B79B0-A95E-436F-AF17-8F5D12334D53}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3CA5E5E1-461A-42FF-B068-734ACC5E7E51}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		build_and_test.yml = .github/workflows/build_and_test.yml
+		nuget_publish.yml = .github/workflows/nuget_publish.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{4C920A32-CD11-49EA-997E-FA6061EC7E61}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build_and_test.yml = .github\workflows\build_and_test.yml
+		.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +31,8 @@ Global
 		{255B79B0-A95E-436F-AF17-8F5D12334D53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{255B79B0-A95E-436F-AF17-8F5D12334D53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{255B79B0-A95E-436F-AF17-8F5D12334D53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4C920A32-CD11-49EA-997E-FA6061EC7E61} = {3CA5E5E1-461A-42FF-B068-734ACC5E7E51}
 	EndGlobalSection
 EndGlobal
