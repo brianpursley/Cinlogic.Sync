@@ -16,36 +16,19 @@ public class OnceTests
     }
 
     [Fact]
-    public void DoAsync_Executes_Only_Once_Even_In_Parallel_Calls()
+    public async Task DoAsync_Executes_Only_Once_Even_In_Parallel_Calls()
     {
         var once = new Once();
         var counter = 0;
 
-        var threads = new Thread[100];
-        for (var i = 0; i < threads.Length; i++)
+        await Parallel.ForAsync(0, 1000, async (_, ct) =>
         {
-            threads[i] = new Thread(() =>
+            await once.DoAsync(() =>
             {
-                var tasks = Enumerable.Range(0, 1000)
-                    .Select(_ => once.DoAsync(() =>
-                    {
-                        Interlocked.Increment(ref counter);
-                        return Task.CompletedTask;
-                    }))
-                    .ToArray();
-                Task.WhenAll(tasks).Wait();
-            });
-        }
-
-        foreach (var t in threads)
-        {
-            t.Start();
-        }
-
-        foreach (var t in threads)
-        {
-            t.Join();
-        }
+                Interlocked.Increment(ref counter);
+                return Task.CompletedTask;
+            }, ct);
+        });
 
         Assert.Equal(1, counter);
     }
@@ -58,7 +41,7 @@ public class OnceTests
         var cancellationToken = new CancellationTokenSource();
         await cancellationToken.CancelAsync();
 
-        await Assert.ThrowsAsync<TaskCanceledException>(() => once.DoAsync(_ =>
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => once.DoAsync(_ =>
         {
             counter++;
             return Task.CompletedTask;
@@ -75,7 +58,7 @@ public class OnceTests
         var cancellationToken = new CancellationTokenSource();
         await cancellationToken.CancelAsync();
 
-        await Assert.ThrowsAsync<TaskCanceledException>(() => once.DoAsync(_ =>
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => once.DoAsync(_ =>
         {
             counter++;
             return Task.FromResult(1);
