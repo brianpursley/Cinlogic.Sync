@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace Cinlogic.Sync.Tests;
 
 public class OnceTests
@@ -19,20 +21,52 @@ public class OnceTests
         var once = new Once();
         var counter = 0;
 
-        var tasks = Enumerable.Range(0, 1000)
-            .Select(_ => once.DoAsync(() =>
+        await Parallel.ForAsync(0, 1000, async (_, ct) =>
+        {
+            await once.DoAsync(() =>
             {
                 Interlocked.Increment(ref counter);
                 return Task.CompletedTask;
-            }))
-            .ToArray();
-
-        await Task.WhenAll(tasks);
+            }, ct);
+        });
 
         Assert.Equal(1, counter);
     }
 
-        
+    [Fact]
+    public async Task DoAsync_Uses_CancellationToken()
+    {
+        var once = new Once();
+        var counter = 0;
+        var cancellationToken = new CancellationTokenSource();
+        await cancellationToken.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => once.DoAsync(_ =>
+        {
+            counter++;
+            return Task.CompletedTask;
+        }, cancellationToken.Token));
+
+        Assert.Equal(0, counter);
+    }
+
+    [Fact]
+    public async Task Once_Generic_DoAsync_Uses_CancellationToken()
+    {
+        var once = new Once<int>();
+        var counter = 0;
+        var cancellationToken = new CancellationTokenSource();
+        await cancellationToken.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => once.DoAsync(_ =>
+        {
+            counter++;
+            return Task.FromResult(1);
+        }, cancellationToken.Token));
+
+        Assert.Equal(0, counter);
+    }
+
     [Fact]
     public void Once_Generic_Returns_Result()
     {
@@ -72,8 +106,7 @@ public class OnceTests
         Assert.Equal(10, result1);
         Assert.Equal(10, result2);
     }
-        
-        
+
     [Fact]
     public void Do_Executes_Immediately()
     {
@@ -94,22 +127,6 @@ public class OnceTests
             return Task.CompletedTask;
         });
         Assert.Equal(1, counter);
-    }
-
-    [Fact]
-    public void Dispose_Throws_On_Subsequent_Do_Calls()
-    {
-        var once = new Once();
-        once.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => once.Do(() => {}));
-    }
-
-    [Fact]
-    public async Task Dispose_Throws_On_Subsequent_DoAsync_Calls()
-    {
-        var once = new Once();
-        once.Dispose();
-        await Assert.ThrowsAsync<ObjectDisposedException>(() => once.DoAsync(() => Task.CompletedTask));
     }
 
     [Fact]
@@ -153,7 +170,7 @@ public class OnceTests
         await once.DoAsync(() => { counter++; return Task.CompletedTask; });
         Assert.Equal(2, counter);
     }
-    
+
     [Fact]
     public void Do_Throws_When_Action_Is_Null()
     {
@@ -165,9 +182,9 @@ public class OnceTests
     public async Task DoAsync_Throws_When_Action_Is_Null()
     {
         var once = new Once();
-        await Assert.ThrowsAsync<ArgumentNullException>(() => once.DoAsync(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => once.DoAsync((Func<Task>)null!));
     }
-    
+
     [Fact]
     public void Do_Returns_Result_After_Exception()
     {
@@ -185,7 +202,7 @@ public class OnceTests
         var result = await once.DoAsync(() => Task.FromResult(10));
         Assert.Equal(10, result);
     }
-    
+
     [Fact]
     public void Do_Throws_After_Exception_If_DoneOnException_True()
     {
@@ -201,7 +218,7 @@ public class OnceTests
         await Assert.ThrowsAsync<Exception>(() => once.DoAsync(() => throw new Exception(), true));
         await Assert.ThrowsAsync<Exception>(() => once.DoAsync(() => Task.FromResult(10)));
     }
-    
+
     [Fact]
     public async Task Mixed_Do_And_DoAsync_Executes_Only_Once()
     {
