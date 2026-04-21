@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard1.3</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>11</LangVersion>
+        <LangVersion>14</LangVersion>
         <PackageId>Cinlogic.Sync</PackageId>
         <Authors>Brian Pursley</Authors>
         <Company>Cinlogic LLC</Company>
@@ -16,10 +15,17 @@
         <Description>Cinlogic.Sync provides an easy way to ensure an action or function is executed only once in a multi-threaded environment. It is inspired by Go's sync.Once type.</Description>
         <RepositoryUrl>https://github.com/brianpursley/Cinlogic.Sync</RepositoryUrl>
         <PackageTags>Sync Once Threading</PackageTags>
+        <TargetFrameworks>net10.0;net8.0;netstandard2.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath=""/>
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <Content Include="..\README.md">
+            <Link>README.md</Link>
+        </Content>
+    </ItemGroup>
+
 </Project>
