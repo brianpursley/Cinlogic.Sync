@@ -63,7 +63,7 @@ public class OnceTests
             counter++;
             return Task.CompletedTask;
         }, cancellationToken.Token));
-        
+
         Assert.Equal(0, counter);
     }
 
@@ -80,7 +80,7 @@ public class OnceTests
             counter++;
             return Task.FromResult(1);
         }, cancellationToken.Token));
-        
+
         Assert.Equal(0, counter);
     }
 
@@ -123,7 +123,7 @@ public class OnceTests
         Assert.Equal(10, result1);
         Assert.Equal(10, result2);
     }
-    
+
     [Fact]
     public void Do_Executes_Immediately()
     {
