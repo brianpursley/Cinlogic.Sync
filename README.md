@@ -19,24 +19,6 @@ Or via the .NET CLI:
 dotnet add package Cinlogic.Sync
 ```
 
-If you want to include a specific version of the package, you can specify the version number as shown below:
-
-Package Manager:
-
-```shell
-Install-Package Cinlogic.Sync -Version 1.0.0
-````
-
-.NET CLI:
-
-```shell
-dotnet add package Cinlogic.Sync --version 1.0.0
-```
-
-Remember to replace 1.0.0 with the actual version number you want to install.
-
-Note that the exact way of adding the package might be slightly different depending on your IDE or development environment.
-
 ## Usage
 
 To use the `Once` class in your project:
@@ -58,6 +40,7 @@ Console.WriteLine(counter); // Outputs: 1
 * Ensures that a function or an action is executed only once, even in a multithreaded environment.
 * Allows for exception handling in the Do method.
 * Provides async support with the DoAsync method.
+* Supports cancellation tokens for async operations.
 
 # Examples
 Please see the tests for more examples of how to use the Once class.
